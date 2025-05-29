@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:phone_store/Screens/register.dart';
+import 'login.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -11,11 +13,45 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 245, 246, 247),
+      drawer: Drawer(
+        child: Column(
+          children: [
+            UserAccountsDrawerHeader(
+              decoration: BoxDecoration(
+                color: const Color.fromARGB(255, 80, 116, 52),
+              ),
+              accountName: Text('Omar Dyab'),
+              accountEmail: Text('omar@gmail.com'),
+              currentAccountPicture: CircleAvatar(
+                backgroundImage: AssetImage('assets/images/image.png'),
+              ),
+            ),
+            ListTile(
+              leading: const Icon(Icons.login),
+              title: const Text('Login'),
+              onTap: () {
+                Navigator.of(
+                  context,
+                ).push(MaterialPageRoute(builder: (context) => LoginScreen()));
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.person_add),
+              title: const Text('Sign Up'),
+              onTap: () {
+                Navigator.of(
+                  context,
+                ).push(MaterialPageRoute(builder: (context) => SignUpScreen()));
+              },
+            ),
+          ],
+        ),
+      ),
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 245, 246, 247),
         centerTitle: true,
         title: const Text('Home'),
-        leading: const Icon(Icons.menu),
         actions: [
           IconButton(onPressed: () {}, icon: const Icon(Icons.notifications)),
         ],
@@ -33,10 +69,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         prefixIcon: const Icon(Icons.search),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(color: Colors.grey),
+                          borderSide: const BorderSide(color: Colors.grey),
                         ),
                         hintText: 'Search',
-                        hintStyle: TextStyle(color: Colors.grey),
+                        hintStyle: const TextStyle(color: Colors.grey),
                       ),
                     ),
                   ),
@@ -62,17 +98,17 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 10, right: 10),
+              padding: const EdgeInsets.only(left: 10, right: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
+                  const Text(
                     "Popular Item",
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   TextButton(
                     onPressed: () {},
-                    child: Text(
+                    child: const Text(
                       "see all",
                       style: TextStyle(color: Colors.green),
                     ),
@@ -84,10 +120,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color.fromARGB(255, 163, 230, 105),
-        unselectedItemColor: const Color.fromARGB(255, 255, 255, 255),
-        selectedItemColor: const Color.fromARGB(255, 156, 236, 129),
-        items: [
+        backgroundColor: Colors.white,
+        unselectedItemColor: Colors.grey,
+        selectedItemColor: Colors.green,
+        items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
