@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:phone_store/Screens/register.dart';
+import 'package:phone_store/Screens/favorite.dart';
+import 'package:phone_store/Screens/home_content.dart';
+import 'package:phone_store/Screens/profile.dart';
+import 'Smart_phones.dart';
+import 'accessories.dart';
+import 'chargers.dart';
+import 'headphone.dart';
+import 'register.dart';
 import 'login.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -10,125 +17,165 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  var index = 0;
+  List<Widget> screens = [HomeContent(), Favorite(), Profile()];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 245, 246, 247),
       drawer: Drawer(
-        child: Column(
-          children: [
-            UserAccountsDrawerHeader(
-              decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 80, 116, 52),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              UserAccountsDrawerHeader(
+                decoration: BoxDecoration(
+                  color: const Color.fromARGB(255, 80, 116, 52),
+                ),
+                accountName: Text('Omar Dyab'),
+                accountEmail: Text('omar@gmail.com'),
+                currentAccountPicture: CircleAvatar(
+                  backgroundImage: AssetImage('assets/images/image.png'),
+                ),
               ),
-              accountName: Text('Omar Dyab'),
-              accountEmail: Text('omar@gmail.com'),
-              currentAccountPicture: CircleAvatar(
-                backgroundImage: AssetImage('assets/images/image.png'),
+              ListTile(
+                leading: const Icon(Icons.login),
+                title: const Text('Login'),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                  );
+                },
               ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.login),
-              title: const Text('Login'),
-              onTap: () {
-                Navigator.of(
-                  context,
-                ).push(MaterialPageRoute(builder: (context) => LoginScreen()));
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.person_add),
-              title: const Text('Sign Up'),
-              onTap: () {
-                Navigator.of(
-                  context,
-                ).push(MaterialPageRoute(builder: (context) => SignUpScreen()));
-              },
-            ),
-          ],
+              ListTile(
+                leading: const Icon(Icons.person_add),
+                title: const Text('Sign Up'),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => SignUpScreen()),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.phone_android),
+                title: const Text('Smartphones'),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => Smartphones()),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.extension),
+                title: const Text('Accessories'),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => Accessories()),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.battery_charging_full),
+                title: const Text('Chargers & Batteries'),
+                onTap: () {
+                  Navigator.of(
+                    context,
+                  ).push(MaterialPageRoute(builder: (context) => Chargers()));
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.headphones),
+                title: const Text('Headphones & Earphones'),
+                onTap: () {
+                  Navigator.of(
+                    context,
+                  ).push(MaterialPageRoute(builder: (context) => Headphone()));
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.watch),
+                title: const Text('Smart Gadgets'),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => SignUpScreen()),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.sd_storage),
+                title: const Text('Storage & Memory'),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => SignUpScreen()),
+                  );
+                },
+              ),
+              SizedBox(height: 100),
+              ListTile(
+                leading: const Icon(Icons.star),
+                title: const Text('Best Sellers'),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => SignUpScreen()),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.local_offer),
+                title: const Text('Deals & Discounts'),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => SignUpScreen()),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.logout),
+                title: const Text('Logout'),
+                onTap: () {},
+              ),
+            ],
+          ),
         ),
       ),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 245, 246, 247),
         centerTitle: true,
-        title: const Text('Home'),
+        title: const Text(
+          'Phone Store',
+          style: TextStyle(
+            color: Colors.green,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Times New Roman',
+          ),
+        ),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.notifications)),
+          PopupMenuButton<String>(
+            icon: Icon(Icons.notification_add_outlined),
+            onSelected: (value) {},
+            itemBuilder:
+                (BuildContext context) => [
+                  PopupMenuItem(value: '', child: Text("Notification 1")),
+                  PopupMenuItem(value: '', child: Text("Notification 2")),
+                  PopupMenuItem(value: '', child: Text("Notification 3")),
+                ],
+          ),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Container(
-                    padding: const EdgeInsets.all(10),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        prefixIcon: const Icon(Icons.search),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(color: Colors.grey),
-                        ),
-                        hintText: 'Search',
-                        hintStyle: const TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                  ),
-                ),
-                ButtonTheme(
-                  child: IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.filter_list, color: Colors.green),
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: Image.asset(
-                  'assets/images/offer_banner.png',
-                  width: double.infinity,
-                  height: 200,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 10, right: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Text(
-                    "Popular Item",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      "see all",
-                      style: TextStyle(color: Colors.green),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+      body: screens[index],
       bottomNavigationBar: BottomNavigationBar(
+        currentIndex: index,
+        onTap: (int newIndex) {
+          setState(() {
+            index = newIndex;
+          });
+        },
         backgroundColor: Colors.white,
         unselectedItemColor: Colors.grey,
         selectedItemColor: Colors.green,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
-            label: 'Cart',
-          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
             label: 'Favorite',
