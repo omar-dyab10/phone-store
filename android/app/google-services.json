@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "734280454164",
+    "project_id": "phone-store-new",
+    "storage_bucket": "phone-store-new.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:734280454164:android:f3c7c785686e7ef3819701",
+        "android_client_info": {
+          "package_name": "com.example.phone_store"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsGHVJzmam_80J1eSh2JzoVa7fialGCVs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

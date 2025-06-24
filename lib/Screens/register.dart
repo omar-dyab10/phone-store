@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 
 class SignUpScreen extends StatefulWidget {
@@ -16,15 +17,44 @@ class _SignUpScreenState extends State<SignUpScreen> {
   var formKey = GlobalKey<FormState>();
   bool isChecked = false;
 
-  void _handleSignUp() {
+    void _handleSignUp() async {
     if (formKey.currentState!.validate() && isChecked) {
       formKey.currentState!.save();
-      print(nameController.text);
-      print(emailController.text);
-      print(passwordController.text);
-      Navigator.of(
-        context,
-      ).push(MaterialPageRoute(builder: (context) => HomeScreen()));
+
+      try {
+        UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+
+        // Get the newly created user
+        User? user = userCredential.user;
+
+        if (user != null) {
+          // Update the user's display name
+          await user.updateDisplayName(nameController.text);
+          // You might want to reload the user to get the updated profile
+          // await user.reload(); // Reload is often not strictly necessary immediately after updateDisplayName
+          // user = FirebaseAuth.instance.currentUser; // Get the reloaded user
+        }
+
+        // If registration is successful, navigate to the home screen
+        if (!mounted) return; 
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomeScreen()));
+      } on FirebaseAuthException catch (e) {
+        String errorMessage = 'An unknown error occurred.';
+        if (e.code == 'weak-password') {
+          errorMessage = 'The password provided is too weak.';
+        } else if (e.code == 'email-already-in-use') {
+          errorMessage = 'The account already exists for that email.';
+        } else {
+          errorMessage = e.message ?? 'An error occurred during registration.';
+        }
+        print('Registration Error: $errorMessage');
+      } catch (e) {
+        print(e);
+        print('An unexpected error occurred.');
+      }
     }
   }
 
@@ -161,3 +191,5 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 }
+
+

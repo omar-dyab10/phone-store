@@ -8,6 +8,7 @@ import 'chargers.dart';
 import 'headphone.dart';
 import 'register.dart';
 import 'login.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // Added Firebase Auth import
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -22,6 +23,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Get the current user from Firebase Auth
+    final user = FirebaseAuth.instance.currentUser;
+    final bool isLoggedIn = user != null;
+
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 245, 246, 247),
       drawer: Drawer(
@@ -32,30 +37,33 @@ class _HomeScreenState extends State<HomeScreen> {
                 decoration: BoxDecoration(
                   color: const Color.fromARGB(255, 80, 116, 52),
                 ),
-                accountName: Text('Omar Dyab'),
-                accountEmail: Text('omar@gmail.com'),
+                accountName: Text(isLoggedIn ? (user.displayName ?? 'Guest User') : 'Guest User'), // Display username or email
+                accountEmail: Text(isLoggedIn ? user.email ?? '' : 'Not Logged In'),
                 currentAccountPicture: CircleAvatar(
                   backgroundImage: AssetImage('assets/images/image.png'),
                 ),
               ),
-              ListTile(
-                leading: const Icon(Icons.login),
-                title: const Text('Login'),
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => LoginScreen()),
-                  );
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.person_add),
-                title: const Text('Sign Up'),
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => SignUpScreen()),
-                  );
-                },
-              ),
+              // Conditionally display Login and Sign Up
+              if (!isLoggedIn)
+                ListTile(
+                  leading: const Icon(Icons.login),
+                  title: const Text('Login'),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => LoginScreen()),
+                    );
+                  },
+                ),
+              if (!isLoggedIn)
+                ListTile(
+                  leading: const Icon(Icons.person_add),
+                  title: const Text('Sign Up'),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => SignUpScreen()),
+                    );
+                  },
+                ),
               ListTile(
                 leading: const Icon(Icons.phone_android),
                 title: const Text('Smartphones'),
@@ -129,11 +137,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 },
               ),
-              ListTile(
-                leading: const Icon(Icons.logout),
-                title: const Text('Logout'),
-                onTap: () {},
-              ),
+              // Conditionally display Logout
+              if (isLoggedIn)
+                ListTile(
+                  leading: const Icon(Icons.logout),
+                  title: const Text('Logout'),
+                  onTap: () async { 
+                    await FirebaseAuth.instance.signOut();
+                    if (!context.mounted) return; 
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginScreen())); 
+                  },
+                ),
             ],
           ),
         ),
@@ -186,3 +200,5 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
+
+

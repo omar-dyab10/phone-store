@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'home_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart'; // Added Firebase Auth import
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({super.key});
@@ -14,14 +15,36 @@ class _LoginScreenState extends State<LoginScreen> {
   var formKey = GlobalKey<FormState>();
   bool isChecked = false;
 
-  void _handleLogin() {
+  void _handleLogin() async { // Made the function async
     if (formKey.currentState!.validate() && isChecked) {
       formKey.currentState!.save();
-      print(emailController.text);
-      print(passwordController.text);
-      Navigator.of(
-        context,
-      ).push(MaterialPageRoute(builder: (context) => HomeScreen()));
+
+      try {
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+        // If sign-in is successful, navigate to the home screen
+        // Check if the widget is still mounted before using context
+        if (!mounted) return; 
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomeScreen()));
+      } on FirebaseAuthException catch (e) {
+        // Handle Firebase authentication errors
+        String errorMessage = 'An unknown error occurred.';
+        if (e.code == 'user-not-found') {
+          errorMessage = 'No user found for that email.';
+        } else if (e.code == 'wrong-password') {
+          errorMessage = 'Wrong password provided for that user.';
+        } else {
+          errorMessage = e.message ?? 'An error occurred during sign-in.';
+        }
+        print('Sign-in Error: $errorMessage');
+        // You can show a SnackBar or AlertDialog to the user with errorMessage
+      } catch (e) {
+        print(e);
+        // Handle any other non-Firebase errors
+        print('An unexpected error occurred.');
+      }
     }
   }
 
@@ -141,3 +164,5 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 }
+
+
